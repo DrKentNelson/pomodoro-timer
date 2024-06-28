@@ -8,10 +8,11 @@
 * 6. Configuration or Environment Variables
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { CgPlayPause, CgPlayButton, CgRedo } from "react-icons/cg";
 import styles from "./TimerBoard.module.css";
+import countdownSound from "../../../assets/countdown.mp3";
 
 /**
 * Application TimerBoard Component.
@@ -19,12 +20,11 @@ import styles from "./TimerBoard.module.css";
 */
 const TimerBoard = () => {
 
-    const [minutes, setMinutes] = useState('25')
-    const [seconds, setSeconds] = useState('00')
-    const [isRunning, setIsRunning] = useState(false)
-    const predefinedTimes = ['10:00', '15:00', '20:00', '25:00']
-    const [timerId, setTimerId] = useState(null)
-    const [isDarkMode, setIsDarkMode] = useState(false)
+    const [minutes, setMinutes] = useState('25');
+    const [seconds, setSeconds] = useState('00');
+    const [isRunning, setIsRunning] = useState(false);
+    const [timerId, setTimerId] = useState(null);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     const handleMinutesChange = (event) => {
         const { value } = event.target;
@@ -52,6 +52,50 @@ const TimerBoard = () => {
         setSeconds('00');
         clearInterval(timerId);
     }
+
+    const selectDefinedTime = (newTime) => {
+        const [newMinutes, newSeconds] = newTime.split(':');
+        setMinutes(newMinutes);
+        setSeconds(newSeconds);
+    }
+
+    const playSound = () => {
+        const audio = new Audio(countdownSound);
+
+        audio.play();
+    }
+
+    useEffect(() => {
+        if (isRunning) {
+            const intervalId = setInterval(() => {
+                if (parseInt(seconds) === 0) {
+                    if (parseInt(minutes) === 0) {
+                        handleReset();
+                        return
+                    } else {
+                        setMinutes((prevMinutes) => (parseInt(prevMinutes) - 1).toString().padStart(2, '0'));
+                        setSeconds('59');
+                    }
+                } else {
+                    setSeconds((prevSeconds) => {
+                        if (parseInt(prevSeconds) === 6) {
+                            playSound();
+                        }
+                        return (parseInt(prevSeconds) - 1).toString().padStart(2, '0');
+                    });
+                }
+            }, 1000);
+
+            return () => {
+                clearInterval(intervalId);
+            }
+        }
+    }, [isRunning, minutes, seconds])
+
+    useEffect(() => {
+        document.title = "PomodoroTimer " + (isRunning ? "Running" : "");
+        document.body.classList.toggle(styles.darkMode, isDarkMode);
+    }, [isRunning, isDarkMode])
 
     return (
         <div className={`${styles.timer} ${isDarkMode ? styles.timerDarkMode : ''}`}>
