@@ -1,0 +1,94 @@
+.timer {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    height: 60vh;
+    width: 80vw;
+    background-color: rgb(194, 191, 191);
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    gap: 1rem;
+}
+
+.timerDarkMode {
+    background-color: rgb(58, 58, 58);
+}
+
+.timeInput {
+    font-size: 8em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-radius: 1rem;
+    background-color: #333;
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    height: 100%;
+    width: 70%;
+    text-align: center;
+}
+
+.controls {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+
+.startStopButton,
+.resetButton {
+    background-color: #007bff;
+    border: none;
+    color: inherit;
+    padding: 10px 20px;
+    border-radius: 1rem;
+    cursor: pointer;
+    height: 100%;
+    padding: 2rem 2.5rem;
+    font-size: 3rem;
+}
+
+.startStopButton:hover,
+.resetButton:hover {
+    background-color: #0056b3;
+}
+
+.startStopButton:disabled,
+.resetButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .preTimes {
+        flex-wrap: wrap;
+    }
+
+    .timer {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .timeInput {
+        font-size: 2rem;
+        height: unset;
+        width: 30%;
+    }
+
+    .controls {
+        height: unset;
+        width: 100%;
+    }
+
+    .startStopButton,
+    .resetButton {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .timerContainer {}
+}
